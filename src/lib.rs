@@ -200,8 +200,9 @@ pub mod tui {
                 }
                 app.query.clear();
               } else {
-                let video = &app.videos[app.selected];
-                app.message = video.url.clone();
+                //let video = &app.videos[app.selected];
+                //app.message = video.url.clone();
+                return Ok(());
               }
             }
             KeyCode::Up => {
