@@ -1,0 +1,27 @@
+use ratatui::{
+  crossterm::{
+    event::{DisableMouseCapture, EnableMouseCapture}, 
+    execute,
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode}
+  },
+  prelude::*,
+};
+use ytta::{App, tui::start_app};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+  enable_raw_mode()?;
+  let mut stdout = std::io::stdout();
+  execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+
+  let backend = CrosstermBackend::new(stdout);
+  let mut terminal = Terminal::new(backend)?;
+
+  let mut app = App::new();
+  start_app(&mut terminal, &mut app).await?;
+
+  disable_raw_mode()?;
+  execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
+  terminal.show_cursor()?;
+  Ok(())
+}
